@@ -5,12 +5,12 @@ ENV["TERM"]="linux"
 Vagrant.require_version ">= 2.2.10"
 Vagrant.configure("2") do |config|
   config.vm.provision "shell",
-    inline: "sudo su - && zypper update && zypper install -y apparmor-parser"
-  
+    inline: "sudo su - && zypper --non-interactive update && zypper install -y apparmor-parser"
+
   # Set the image for the vagrant box
-  config.vm.box = "opensuse/Leap-15.2.x86_64"
+  config.vm.box = "opensuse/Leap-15.6.x86_64"
   # Set the image version
-  config.vm.box_version = "15.2.31.632"
+  config.vm.box_version = "15.6.13.356"
 
   # Forward the ports from the guest VM to the local host machine
   # Forward more ports, as needed
@@ -19,8 +19,8 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 6112, host: 6112
 
   # Set the static IP for the vagrant box
-  config.vm.network "private_network", ip: "192.168.50.4"
-  
+  config.vm.network "private_network", ip: "192.168.56.4"
+
   # Configure the parameters for VirtualBox provider
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "4096"

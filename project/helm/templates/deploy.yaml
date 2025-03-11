@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-deployment
+  namespace: {{ .Values.namespace.name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+      tag: {{ .Chart.Version }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+        tag: {{ .Chart.Version }}
+    spec:
+      containers:
+      - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        name: {{ .Chart.Name }}-{{ .Chart.Version }}
+        ports:
+        - containerPort: {{ .Values.containerPort }}
+        resources:
+          requests:
+{{ toYaml .Values.resources.requests | indent 12 }}
+          limits:
+{{ toYaml .Values.resources.limits | indent 12 }}
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.livenessProbePath }}
+            port: {{ .Values.containerPort }}
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.readinessProbePath }}
+            port: {{ .Values.containerPort }}

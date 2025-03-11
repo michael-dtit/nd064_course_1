@@ -3,7 +3,7 @@ namespace:
 
 service:
   port: 4111
-  targetPort: 3111
+  targetPort: 3111 # DRY: must be same as containerPort
   protocol: TCP
   type: ClusterIP
   
@@ -25,5 +25,7 @@ resources:
 containerPort: 3111
 
 livenessProbePath: /healthz
+livenessProbePort: 3111 # DRY: must be same as containerPort
 
 readinessProbePath: /healthz
+readinessProbePort: 3111 # DRY: must be same as containerPort

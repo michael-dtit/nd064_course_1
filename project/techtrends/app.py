@@ -10,11 +10,11 @@ logging_config = {
     'formatters': {'default': {
         'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
     }},
-    'handlers': {'wsgi': {
+    'handlers': {'stderr': {
         'class': 'logging.StreamHandler',
-        'stream': 'ext://flask.logging.wsgi_errors_stream',
+        'stream': 'ext://sys.stderr',
         'formatter': 'default',
-        'level': 'ERROR'
+        'level': 'WARNING'
     },
     'stdout': {
         'class': 'logging.StreamHandler',
@@ -24,7 +24,7 @@ logging_config = {
     }},
     'root': {
         'level': 'DEBUG',
-        'handlers': ['wsgi', 'stdout']
+        'handlers': ['stderr', 'stdout']
     }
 }
 
@@ -46,6 +46,9 @@ def get_post(post_id):
                         (post_id,)).fetchone()
     connection.close()
     return post
+
+# Define logging
+logging.config.dictConfig(logging_config)
 
 # Define the Flask application
 app = Flask(__name__)
@@ -123,5 +126,4 @@ def metrics():
 
 # start the application on port 3111
 if __name__ == "__main__":
-    logging.config.dictConfig(logging_config)
     app.run(host='0.0.0.0', port='3111')
